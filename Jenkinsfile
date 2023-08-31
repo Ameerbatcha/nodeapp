@@ -12,15 +12,15 @@ pipeline{
             }
         }
         
-      //  stage('packing') {
-        //    steps {
-          //      sh 'tar czf Node.tar.gz package.json public src'
-          //  }
-      //  }
+        stage('packing') {
+            steps {
+               sh 'tar czf Node.tar.gz package.json public src'
+            }
+        }
         
         stage('Build'){
             steps{
-               //sh 'tar xzf Node.tar.gz'
+               
                 sh "docker build . -t ameerbatcha/nodeapp:${DOCKER_TAG}"
             }
         }
