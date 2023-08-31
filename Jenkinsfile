@@ -8,7 +8,7 @@ pipeline{
         
         stage('SCM'){
             steps{
-                git 'https://github.com/Thoshinny-cyber/simple-node-js-react-npm-app.git'
+                git 'https://github.com/Ameerbatcha/nodeapp.git'
             }
         }
         
@@ -20,25 +20,24 @@ pipeline{
         
         stage('Build'){
             steps{
-                
                 tar xzf Node.tar.gz
-                sh "docker build . -t thoshinny/nodeapp:${DOCKER_TAG} "
+                sh "docker build . -t ameerbatcha/nodeapp:${DOCKER_TAG}"
             }
         }
         
         stage('DockerHub Push'){
             steps{
-                withCredentials([string(credentialsId: 'docker_hub1', variable: 'dockerHubPwd')]) {
-                    sh "docker login -u thoshinny -p ${dockerHubPwd}"
-                }
-                
-                sh "docker push thoshinny/nodeapp:${DOCKER_TAG} "
+                 withCredentials([string(credentialsId: 'dockerhub', variable: 'dockerhubpasswd')]) {
+                      sh 'docker login -u ameerbatcha -p ${dockerhubpasswd}'
+                   }
+             
+              sh 'docker push ameerbatcha/nodeapp:${DOCKER_TAG}'
             }
         }
         
         stage('Docker Deploy'){
             steps{
-              ansiblePlaybook credentialsId: 'dev-server', disableHostKeyChecking: true, extras: "-e DOCKER_TAG=${DOCKER_TAG}", installation: 'ansible', inventory: 'dev.inv', playbook: 'deploy-docker.yml'
+             ansiblePlaybook credentialsId: 'dev-dockerhost', disableHostKeyChecking: true, extras: '-e DOCKER_TAG=${DOCKER_TAG}', installation: 'ansible', inventory: 'dev.inv', playbook: 'deploy-docker.yml'
             }
         }
     }
