@@ -20,7 +20,7 @@ pipeline{
         
         stage('Build'){
             steps{
-                tar xzf Node.tar.gz
+               sh 'tar xzf Node.tar.gz'
                 sh "docker build . -t ameerbatcha/nodeapp:${DOCKER_TAG}"
             }
         }
