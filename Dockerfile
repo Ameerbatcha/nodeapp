@@ -1,6 +1,5 @@
 FROM node
 WORKDIR /app
-COPY package.json ./
 COPY Node.tar.gz .
 RUN tar xzf Node.tar.gz
 RUN npm install
