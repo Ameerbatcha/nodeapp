@@ -1,6 +1,8 @@
 FROM node
 WORKDIR /app
-COPY . .
+COPY Node.tar.gz .
+RUN sh 'tar -xf Node.tar.gz'
+#COPY . .
 RUN npm install 
 EXPOSE 3000
 CMD ["npm", "start"]
