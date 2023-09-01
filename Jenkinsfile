@@ -6,11 +6,13 @@ pipeline{
     }
     stages{
         
-      /*  stage('SCM'){
+      /* 
+      stage('SCM'){
             steps{
                 git 'https://github.com/Ameerbatcha/nodeapp.git'
            }
-        }  */
+        }
+      */
         
         stage('packing') {
             steps {
