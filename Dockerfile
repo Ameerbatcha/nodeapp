@@ -4,8 +4,8 @@ WORKDIR /app
 COPY Node.tar.gz .
 RUN tar xzf Node.tar.gz
 COPY src/index.js /app/
-RUN npm install -g pm2
-CMD ["pm2-runtime", "start", "index.js"]
+RUN npm install 
+CMD ["npm", "start"]
 
 #FROM node
 #WORKDIR /app
