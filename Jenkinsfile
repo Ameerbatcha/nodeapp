@@ -22,7 +22,6 @@ pipeline{
         
         stage('Build'){
             steps{
-                sh 'rm -rf .idea jenkins public src .gitattributes .gitignore package.json'
                 sh ' tar -xf Node.tar.gz '
                 sh 'rm -rf Node.tar.gz '
                 sh "docker build . -t ameerbatcha/nodeapp:${DOCKER_TAG}"
