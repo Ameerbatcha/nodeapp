@@ -23,7 +23,7 @@ pipeline{
         stage('Build'){
             steps{
                
-                sh "docker build . -t ameerbatcha/nodeapp:${DOCKER_TAG}"
+                sh "docker build --no-cache . -t ameerbatcha/nodeapp:${DOCKER_TAG}"
             }
         }
         
