@@ -22,8 +22,8 @@ pipeline{
         
         stage('Build'){
             steps{
-               
-                sh "docker build --no-cache . -t ameerbatcha/nodeapp:${DOCKER_TAG}"
+                sh ' rm -rf Node.tar.gz '
+                sh "docker build . -t ameerbatcha/nodeapp:${DOCKER_TAG}"
             }
         }
         
