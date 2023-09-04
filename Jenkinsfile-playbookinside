@@ -93,7 +93,7 @@ pipeline{
 
                     writeFile(file: 'dev.inv', text: ansibleInventoryContent)
 
-
+  withCredentials([usernamePassword(credentialsId: 'dev-dockerhost', usernameVariable: 'SSH_USERNAME', passwordVariable: 'SSH_PASSWORD')]) {
                     ansiblePlaybook(
                         inventory: 'dev.inv',
                         playbook: 'inline_playbook.yml',
@@ -101,6 +101,7 @@ pipeline{
                         installation: 'ansible'
                     )
                 }
+              }
             }
         }
 
