@@ -88,19 +88,20 @@ pipeline{
                     writeFile(file: 'inline_playbook.yml', text: ansiblePlaybookContent)
 
                    def ansibleInventoryContent = '''[dockeradmin]
-                    172.31.43.130 ansible_user=${SSH_USERNAME}
+                    172.31.43.130 ansible_user=ec2-user
                     '''
 
                     writeFile(file: 'dev.inv', text: ansibleInventoryContent)
 
-    withCredentials([sshUserPrivateKey(credentialsId: 'dev-dockerhost', keyFileVariable: 'SSH_KEY', passphraseVariable: 'SSH_PASSPHRASE', usernameVariable: 'SSH_USERNAME')]) {
+   
                     ansiblePlaybook(
                         inventory: 'dev.inv',
                         playbook: 'inline_playbook.yml',
                         extras: "-e DOCKER_TAG=${DOCKER_TAG}",
+                        credentialsId: 'dev-dockerhost',
                         installation: 'ansible'
                     )
-                }
+                
               }
             }
         }
