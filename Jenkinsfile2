@@ -24,7 +24,7 @@ pipeline{
             steps{
                 //sh "tar -xf Node.tar.gz"
                 //sh "docker build . -t thoshinny/nodeapp:${DOCKER_TAG} "
-
+                deleteDir()
                 sshPublisher(publishers: [
     sshPublisherDesc(
         configName: 'docker',
