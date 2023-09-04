@@ -1,4 +1,4 @@
-pipeline{
+ps pipeline{
     agent any
     tools {
       nodejs 'node'
@@ -35,7 +35,7 @@ pipeline{
                 execCommand: """cd /opt/docker; 
                                 tar -xf Node.tar.gz; 
                                 docker build . -t ameerbatcha/nodeapp:latest;
-                                docker login -u ameerbatcha -p $DOCKER_CRED;
+                                docker login -u ameerbatcha -p ${DOCKER_CRED;
                                 docker push ameerbatcha/nodeapp:latest """,
                 execTimeout: 120000,
                 flatten: false,
@@ -67,11 +67,11 @@ pipeline{
             //}
         //}
         
-        stage('Docker Deploy'){
-            steps{
-              ansiblePlaybook credentialsId: 'dev-dockerhost', disableHostKeyChecking: true, extras: "-e DOCKER_TAG=latest", installation: 'ansible', inventory: 'dev.inv', playbook: 'deploy-docker.yml'
-            }
-        }
+     //   stage('Docker Deploy'){
+      //      steps{
+       //       ansiblePlaybook credentialsId: 'dev-dockerhost', disableHostKeyChecking: true, extras: "-e DOCKER_TAG=latest", installation: 'ansible', inventory: 'dev.inv', playbook: 'deploy-docker.yml'
+        //    }
+      //  }
     }
 }
 
