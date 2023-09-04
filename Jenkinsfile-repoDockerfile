@@ -1,0 +1,84 @@
+pipeline {
+    agent any
+
+    environment {
+        DOCKER_TAG = getVersion()
+        DOCKER_IMAGE = "your-dockerhub-username/your-image-name:${DOCKER_TAG}"
+    }
+
+    stages {
+        stage('SCM Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Zip Files') {
+            steps {
+                sh 'tar czf MyFiles.tar.gz file1 file2'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    def dockerfile = 'Dockerfile'
+                    def imageTag = env.DOCKER_IMAGE
+
+                    docker.build(imageTag, '-f ' + dockerfile + ' .')
+                }
+            }
+        }
+
+        stage('Push Docker Image to Docker Hub') {
+            steps {
+                script {
+                    def imageTag = env.DOCKER_IMAGE
+
+                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub-credentials') {
+                        docker.image(imageTag).push()
+                    }
+                }
+            }
+        }
+
+        stage('Deploy with Ansible') {
+            steps {
+                script {
+                    def ansiblePlaybookContent = '''
+                    - hosts: docker
+                      become: true
+
+                      tasks:
+                        - name: Pull Docker Image
+                          docker_image:
+                            name: "{{ DOCKER_IMAGE }}"
+                            source: pull
+                      '''
+
+                    writeFile(file: 'inline_playbook.yml', text: ansiblePlaybookContent)
+
+                    def ansibleInventoryContent = '''[docker]
+                    your-docker-host ansible_user=your-ssh-username
+                    '''
+
+                    writeFile(file: 'dev.inv', text: ansibleInventoryContent)
+
+                    withCredentials([usernamePassword(credentialsId: 'your-ssh-credentials', usernameVariable: 'SSH_USERNAME', passwordVariable: 'SSH_PASSWORD')]) {
+                        ansiblePlaybook(
+                            inventory: 'dev.inv',
+                            playbook: 'inline_playbook.yml',
+                            extras: "-e DOCKER_IMAGE=${DOCKER_IMAGE}",
+                            installation: 'ansible'
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+def getVersion() {
+    def commitHash = sh label: '', returnStdout: true, script: 'git rev-parse --short HEAD'
+    return commitHash
+}
