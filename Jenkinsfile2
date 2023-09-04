@@ -10,7 +10,7 @@ pipeline{
     stages{
         stage('SCM'){
             steps{
-                git  url: 'https://github.com/Thoshinny-cyber/simple-node-js-react-npm-app.git'
+                git  url: 'https://github.com/Ameerbatcha/nodeapp.git'
             }
         }
         
