@@ -3,19 +3,20 @@ pipeline {
 
     environment {
         DOCKER_TAG = getVersion()
-        DOCKER_IMAGE = "your-dockerhub-username/your-image-name:${DOCKER_TAG}"
+        DOCKER_IMAGE = "ameerbatcha/nodeapp:${DOCKER_TAG}"
     }
 
     stages {
         stage('SCM Checkout') {
             steps {
-                checkout scm
+                deleteDir()
+                git 'https://github.com/Ameerbatcha/nodeapp.git'
             }
         }
 
         stage('Zip Files') {
             steps {
-                sh 'tar czf MyFiles.tar.gz file1 file2'
+                sh 'tar czf Node.tar.gz package.json public src'
             }
         }
 
@@ -35,7 +36,7 @@ pipeline {
                 script {
                     def imageTag = env.DOCKER_IMAGE
 
-                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub-credentials') {
+                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
                         docker.image(imageTag).push()
                     }
                 }
@@ -50,28 +51,32 @@ pipeline {
                       become: true
 
                       tasks:
-                        - name: Pull Docker Image
-                          docker_image:
-                            name: "{{ DOCKER_IMAGE }}"
-                            source: pull
+                      - name: Run Docker Container
+                        docker_container:
+                          name: nodecontainer
+                          image: "{{ DOCKER_IMAGE }}"
+                          state: started
+                          published_ports:
+                           - 0.0.0.0:8083:3000
                       '''
 
                     writeFile(file: 'inline_playbook.yml', text: ansiblePlaybookContent)
 
                     def ansibleInventoryContent = '''[docker]
-                    your-docker-host ansible_user=your-ssh-username
+                    your-docker-host ansible_user=ec2-user
                     '''
 
                     writeFile(file: 'dev.inv', text: ansibleInventoryContent)
 
-                    withCredentials([usernamePassword(credentialsId: 'your-ssh-credentials', usernameVariable: 'SSH_USERNAME', passwordVariable: 'SSH_PASSWORD')]) {
+                   
                         ansiblePlaybook(
                             inventory: 'dev.inv',
                             playbook: 'inline_playbook.yml',
                             extras: "-e DOCKER_IMAGE=${DOCKER_IMAGE}",
+                            credentialsId: 'dev-dockerhost',
                             installation: 'ansible'
                         )
-                    }
+                    
                 }
             }
         }
