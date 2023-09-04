@@ -34,10 +34,12 @@ pipeline{
             sshTransfer(
                 cleanRemote: false,
                 excludes: '',
-                execCommand: """cd /opt/docker; 
-                                tar -xf Node.tar.gz; 
-                                docker build . -t ameerbatcha/nodeapp:latest;
-                                docker push ameerbatcha/nodeapp:latest""",
+                execCommand: """
+                                        cd /opt/docker; 
+                                        tar -xf Node.tar.gz; 
+                                        docker build . -t ameerbatcha/nodeapp:${DOCKER_TAG};
+                                        docker push ameerbatcha/nodeapp:${DOCKER_TAG};
+                                        """,
                 execTimeout: 200000,
                 flatten: false,
                 makeEmptyDirs: false,
