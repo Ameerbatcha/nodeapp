@@ -38,7 +38,7 @@ pipeline{
                                 docker login -u ameerbatcha -p $DOCKER_CRED;
                                 docker push ameerbatcha/nodeapp:latestu """,
                 execTimeout: 120000,
-                flatten: false,docker
+                flatten: false,
                 makeEmptyDirs: false,
                 noDefaultExcludes: false,
                 patternSeparator: '[, ]+$',
