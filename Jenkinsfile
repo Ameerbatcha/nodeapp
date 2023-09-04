@@ -36,8 +36,8 @@ pipeline{
                 excludes: '',
                 execCommand: """cd /opt/docker; 
                                 tar -xf Node.tar.gz; 
-                                docker build . -t ameerbatcha/nodeapp:{DOCKER_TAG};
-                                docker push ameerbatcha/nodeapp:{DOCKER_TAG}""",
+                                docker build . -t ameerbatcha/nodeapp:latest;
+                                docker push ameerbatcha/nodeapp:latest""",
                 execTimeout: 200000,
                 flatten: false,
                 makeEmptyDirs: false,
@@ -60,7 +60,7 @@ pipeline{
         
          stage('Docker Deploy'){
             steps{
-              ansiblePlaybook credentialsId: 'dev-dockerhost', disableHostKeyChecking: true, extras: "-e DOCKER_TAG=${DOCKER_TAG}", installation: 'ansible', inventory: 'dev.inv', playbook: 'deploy-docker.yml'
+              ansiblePlaybook credentialsId: 'dev-dockerhost', disableHostKeyChecking: true, extras: "-e DOCKER_TAG=latest", installation: 'ansible', inventory: 'dev.inv', playbook: 'deploy-docker.yml'
             }
         }
     }
