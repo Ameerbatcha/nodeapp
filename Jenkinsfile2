@@ -5,7 +5,7 @@ pipeline{
     }
     environment {
       DOCKER_TAG = getVersion()
-      DOCKER_CRED= credentials('dockerhub')
+      DOCKER_CRED = credentials('dockerhub')
     }
     stages{
         stage('SCM'){
@@ -35,7 +35,7 @@ pipeline{
                 execCommand: """cd /opt/docker; 
                                 tar -xf Node.tar.gz; 
                                 docker build . -t ameerbatcha/nodeapp:latest;
-                                docker login -u ameerbatcha -p $DOCKER_CRED ;
+                                docker login -u ameerbatcha -p ${DOCKER_CRED} ;
                                 docker push ameerbatcha/nodeapp:latest""",
                 execTimeout: 120000,
                 flatten: false,
