@@ -13,6 +13,7 @@ pipeline{
     stages{
         stage('SCM'){
             steps{
+                 deleteDir()
                 git 'https://github.com/Ameerbatcha/nodeapp.git'
             }
         }
@@ -25,7 +26,7 @@ pipeline{
         stage('Docker Build'){
             steps{
                 
-                deleteDir()
+               
                 sshPublisher(publishers: [
     sshPublisherDesc(
         configName: 'docker',
