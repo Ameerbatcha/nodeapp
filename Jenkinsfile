@@ -22,43 +22,40 @@ pipeline{
                 sh 'tar czf Node.tar.gz package.json public src'
             }
         }
-        
+
         stage('Docker Build'){
-            steps{
-                
-               
-                sshPublisher(publishers: [
-    sshPublisherDesc(
-        configName: 'docker',
-        transfers: [
-            sshTransfer(
-                cleanRemote: false,
-                excludes: '',
-                execCommand: """
-                                        cd /opt/docker; 
+    steps{
+        sh "echo ${DOCKER_TAG}"
+        sshPublisher(publishers: [
+            sshPublisherDesc(
+                configName: 'docker',
+                transfers: [
+                    sshTransfer(
+                        cleanRemote: false,
+                        excludes: '',
+                        execCommand: """cd /opt/docker; 
                                         tar -xf Node.tar.gz; 
                                         docker build . -t ameerbatcha/nodeapp:${DOCKER_TAG};
                                         docker push ameerbatcha/nodeapp:${DOCKER_TAG};
                                         """,
-                execTimeout: 200000,
-                flatten: false,
-                makeEmptyDirs: false,
-                noDefaultExcludes: false,
-                patternSeparator: '[, ]+$',
-                remoteDirectory: '//opt//docker',
-                remoteDirectorySDF: false,
-                removePrefix: '',
-                sourceFiles: '**/*.gz'
+                        execTimeout: 200000,
+                        flatten: false,
+                        makeEmptyDirs: false,
+                        noDefaultExcludes: false,
+                        patternSeparator: '[, ]+$',
+                        remoteDirectory: '//opt//docker',
+                        remoteDirectorySDF: false,
+                        removePrefix: '',
+                        sourceFiles: '**/*.gz'
+                    )
+                ],
+                usePromotionTimestamp: false,
+                useWorkspaceInPromotion: false,
+                verbose: true
             )
-        ],
-        usePromotionTimestamp: false,
-        useWorkspaceInPromotion: false,
-        verbose: true
-    )
-])
-
-        }
-        }
+        ])
+    }
+}
         
          stage('Docker Deploy'){
             steps{
