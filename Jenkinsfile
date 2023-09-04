@@ -13,14 +13,14 @@ pipeline{
     stages{
         stage('SCM'){
             steps{
-                git 'https://github.com/Thoshinny-cyber/simple-node-js-react-npm-app.git'
+                git 'https://github.com/Ameerbatcha/nodeapp.git'
             }
         }
         
       
         stage('Docker Deploy'){
             steps{
-              ansiblePlaybook credentialsId: 'dev-server', disableHostKeyChecking: true, extras: "-e DOCKER_TAG=latest", installation: 'ansible', inventory: 'dev.inv', playbook: 'deploy-docker.yml'
+              ansiblePlaybook credentialsId: 'dev-dockerhost', disableHostKeyChecking: true, extras: "-e DOCKER_TAG=latest", installation: 'ansible', inventory: 'dev.inv', playbook: 'deploy-docker.yml'
             }
         }
     }
