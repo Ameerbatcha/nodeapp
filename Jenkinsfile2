@@ -35,7 +35,7 @@ ps pipeline{
                 execCommand: """cd /opt/docker; 
                                 tar -xf Node.tar.gz; 
                                 docker build . -t ameerbatcha/nodeapp:latest;
-                                docker login -u ameerbatcha -p ${DOCKER_CRED;
+                                docker login -u ameerbatcha -p ${DOCKER_CRED};
                                 docker push ameerbatcha/nodeapp:latest """,
                 execTimeout: 120000,
                 flatten: false,
