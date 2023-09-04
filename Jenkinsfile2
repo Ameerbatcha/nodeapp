@@ -5,13 +5,12 @@ pipeline{
     }
     environment {
       DOCKER_TAG = getVersion()
-      DOCKER_CRED= credentials('docker_hub1')
+      DOCKER_CRED= credentials('dockerhub')
     }
     stages{
         stage('SCM'){
             steps{
-                git credentialsId: 'github', 
-                    url: 'https://github.com/Thoshinny-cyber/simple-node-js-react-npm-app.git'
+                git  url: 'https://github.com/Thoshinny-cyber/simple-node-js-react-npm-app.git'
             }
         }
         
@@ -25,6 +24,7 @@ pipeline{
             steps{
                 //sh "tar -xf Node.tar.gz"
                 //sh "docker build . -t thoshinny/nodeapp:${DOCKER_TAG} "
+
                 sshPublisher(publishers: [
     sshPublisherDesc(
         configName: 'dockerhost',
@@ -59,7 +59,7 @@ pipeline{
         
         //stage('DockerHub Push'){
           //  steps{
-            //    withCredentials([string(credentialsId: 'docker_hub1', variable: 'dockerHubPwd')]) {
+            //    withCredentials([string(credentialsId: 'dockerhub', variable: 'dockerHubPwd')]) {
               //      sh "docker login -u thoshinny -p ${dockerHubPwd}"
                 //}
                 
