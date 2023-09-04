@@ -16,15 +16,48 @@ pipeline{
                 git 'https://github.com/Ameerbatcha/nodeapp.git'
             }
         }
-        
-      
-        stage('Docker Deploy'){
-            steps{
-              ansiblePlaybook credentialsId: 'dev-dockerhost', disableHostKeyChecking: true, extras: "-e DOCKER_TAG=latest", installation: 'ansible', inventory: 'dev.inv', playbook: 'deploy-docker.yml'
+          stage('Build') {
+            steps {
+                sh 'tar czf Node.tar.gz package.json public src'
             }
         }
-    }
-}
+        
+        stage('Docker Build'){
+            steps{
+              
+                sshPublisher(publishers: [
+    sshPublisherDesc(
+        configName: 'docker',
+        transfers: [
+            sshTransfer(
+                cleanRemote: false,
+                excludes: '',
+                execCommand: """cd /opt/docker; 
+                                tar -xf Node.tar.gz; 
+                                docker build . -t ameerbatcha/nodeapp:latest;
+                                docker push ameerbatcha/nodeapp:latest""",
+                execTimeout: 120000,
+                flatten: false,
+                makeEmptyDirs: false,
+                noDefaultExcludes: false,
+                patternSeparator: '[, ]+$',
+                remoteDirectory: '//opt//docker',
+                remoteDirectorySDF: false,
+                removePrefix: '',
+                sourceFiles: '**/*.gz'
+            )
+        ],
+        usePromotionTimestamp: false,
+        useWorkspaceInPromotion: false,
+        verbose: true
+    )
+])
+
+        }
+        }
+        
+      
+       
 
 def getVersion(){
     def commitHash = sh label: '', returnStdout: true, script: 'git rev-parse --short HEAD'
