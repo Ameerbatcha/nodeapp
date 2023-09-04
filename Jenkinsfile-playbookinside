@@ -93,7 +93,7 @@ pipeline{
 
                     writeFile(file: 'dev.inv', text: ansibleInventoryContent)
 
-  withCredentials([usernamePassword(credentialsId: 'dev-dockerhost', usernameVariable: 'SSH_USERNAME', passwordVariable: 'SSH_PASSWORD')]) {
+    withCredentials([sshUserPrivateKey(credentialsId: 'dev-dockerhost', keyFileVariable: 'SSH_KEY', passphraseVariable: 'SSH_PASSPHRASE', usernameVariable: 'SSH_USERNAME')]) {
                     ansiblePlaybook(
                         inventory: 'dev.inv',
                         playbook: 'inline_playbook.yml',
