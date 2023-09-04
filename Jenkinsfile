@@ -36,7 +36,7 @@ pipeline{
                                 tar -xf Node.tar.gz; 
                                 docker build . -t ameerbatcha/nodeapp:latest;
                                 docker push ameerbatcha/nodeapp:latest""",
-                execTimeout: 120000,
+                execTimeout: 200000,
                 flatten: false,
                 makeEmptyDirs: false,
                 noDefaultExcludes: false,
