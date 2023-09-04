@@ -24,7 +24,8 @@ pipeline{
         
         stage('Docker Build'){
             steps{
-              
+                
+                deleteDir()
                 sshPublisher(publishers: [
     sshPublisherDesc(
         configName: 'docker',
