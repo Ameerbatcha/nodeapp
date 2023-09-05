@@ -1,6 +1,6 @@
 FROM node
 WORKDIR /app
-COPY Node.tar.gz /app/
+COPY ./Node.tar.gz /app/
 RUN sh 'tar -xf Node.tar.gz'
 RUN rm -rf Node.tar.gz
 RUN npm install 
