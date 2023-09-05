@@ -23,10 +23,13 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    def dockerfile = 'Dockerfile'
-                    def imageTag = env.DOCKER_IMAGE
+                     echo "${DOCKER_IMAGE}"
+                    //   def dockerfile = 'Dockerfile'
+                    // def imageTag = env.DOCKER_IMAGE
+                    // docker.build(imageTag, '-f ' + dockerfile + ' .')
+                    def dockerImage = docker.build('ameerbatcha/nodeapp:${DOCKER_TAG}', '.')
 
-                    docker.build(imageTag, '-f ' + dockerfile + ' .')
+                   
                 }
             }
         }
@@ -37,7 +40,8 @@ pipeline {
                     def imageTag = env.DOCKER_IMAGE
 
                     docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
-                     docker.image(imageTag).push()
+                    // docker.image(imageTag).push()
+                       dockerImage.push()
                     }
                 }
             }
