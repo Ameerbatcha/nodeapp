@@ -51,13 +51,23 @@ pipeline {
                       become: true
 
                       tasks:
-                      - name: Run Docker Container
-                        docker_container:
-                          name: nodecontainer
-                          image: "{{ DOCKER_IMAGE }}"
-                          state: started
-                          published_ports:
-                           - 0.0.0.0:8083:3000
+                        - name: Install python pip
+                          yum:
+                            name: python-pip
+                            state: present
+                        
+                        - name: Install docker-py python module
+                          pip:
+                            name: docker-py
+                            state: present
+                          
+                         - name: Run Docker Container
+                            docker_container:
+                              name: nodecontainer
+                              image: "{{ DOCKER_IMAGE }}"
+                              state: started
+                              published_ports:
+                                - 0.0.0.0:8083:3000
                       '''
 
                     writeFile(file: 'inline_playbook.yml', text: ansiblePlaybookContent)
