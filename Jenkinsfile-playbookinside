@@ -111,14 +111,9 @@ pipeline{
 post {
     always {
 
-  emailext(
-                        subject: 'Approval Needed for SCM Stage',
-                        body: 'Please review and approve the SCM stage.',
-                        to: 'ameerbatcha.learnings@gmail.com',
-                        attachLog: true
-                    )
 
-       /* emailext(
+
+        emailext(
            body: """
                Build ${env.BUILD_NUMBER} of ${env.JOB_NAME} has completed.
                 SCM revision: ${env.GIT_COMMIT}
@@ -130,8 +125,7 @@ post {
             mimeType: 'text/html',
           
             
-        )  */
-
+        )  
 
 
     }
