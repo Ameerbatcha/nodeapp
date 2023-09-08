@@ -114,7 +114,7 @@ post {
   emailext(
                         subject: 'Approval Needed for SCM Stage',
                         body: 'Please review and approve the SCM stage.',
-                        to: 'thoshlearn@gmail.com',
+                        to: 'ameerbatcha.learnings@gmail.com',
                         attachLog: true
                     )
 
