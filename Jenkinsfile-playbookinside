@@ -107,6 +107,27 @@ pipeline{
         }
 
     }
+
+post {
+    always {
+        emailext (
+            subject: 'Build Notification - ${currentBuild.fullDisplayName}',
+            body: '''<p>Build Status: ${currentBuild.currentResult}</p>
+                     <p>Build Number: ${currentBuild.number}</p>
+                     <p>Build URL: ${env.BUILD_URL}</p>''',
+            to: 'ameerbatcha.learnings@gmail.com,',
+            triggers: [
+                success(),
+                failure(),
+                unstable(),
+                aborted(),
+                notBuilt()
+            ]
+        )
+    }
+}
+
+
 }
 
 
