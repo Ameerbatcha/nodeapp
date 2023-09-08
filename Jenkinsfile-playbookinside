@@ -110,19 +110,18 @@ pipeline{
 
 post {
     always {
-        emailext (
-            subject: 'Build Notification - ${currentBuild.fullDisplayName}',
-            body: '''<p>Build Status: ${currentBuild.currentResult}</p>
-                     <p>Build Number: ${currentBuild.number}</p>
-                     <p>Build URL: ${env.BUILD_URL}</p>''',
-            to: 'user1@example.com, user2@example.com',
-            trigger: [
-                success(),
-                failure(),
-                unstable(),
-                aborted(),
-                notBuilt()
-            ]
+        emailext(
+            body: """
+                Build ${env.BUILD_NUMBER} of ${env.JOB_NAME} has completed.
+                SCM revision: ${env.GIT_COMMIT}
+                Docker tag: ${env.DOCKER_TAG}
+            """,
+            subject: "Build ${env.JOB_NAME} ${env.BUILD_NUMBER} completed",
+            to: "ameerbatcha.learnings@gmail.com",
+            recipientProviders: [developers()],
+            mimeType: 'text/html',
+            from: 'ameeruwais2001@gmail.com'
+            credentialsId: 'jenkins-mailsender'
         )
     }
 }
