@@ -121,7 +121,7 @@ post {
             recipientProviders: [developers()],
             mimeType: 'text/html',
             from: 'ameeruwais2001@gmail.com',
-            credentialsId: 'jenkins-mailsender'
+            
         )
     }
 }
