@@ -115,8 +115,8 @@ post {
             body: '''<p>Build Status: ${currentBuild.currentResult}</p>
                      <p>Build Number: ${currentBuild.number}</p>
                      <p>Build URL: ${env.BUILD_URL}</p>''',
-            to: 'ameerbatcha.learnings@gmail.com,',
-            triggers: [
+            to: 'user1@example.com, user2@example.com',
+            trigger: [
                 success(),
                 failure(),
                 unstable(),
