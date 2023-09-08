@@ -120,7 +120,7 @@ post {
             to: "ameerbatcha.learnings@gmail.com",
             recipientProviders: [developers()],
             mimeType: 'text/html',
-            from: 'ameeruwais2001@gmail.com',
+          
             
         )
     }
