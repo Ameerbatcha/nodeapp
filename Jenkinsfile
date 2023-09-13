@@ -38,7 +38,7 @@ pipeline{
                                         docker build . -t ameerbatcha/nodeapp:${DOCKER_TAG}
                                         docker push ameerbatcha/nodeapp:${DOCKER_TAG}
                                         """,
-                        execTimeout: 200000,
+                        execTimeout: 2000000,
                         flatten: false,
                         makeEmptyDirs: false,
                         noDefaultExcludes: false,
